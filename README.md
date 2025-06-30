@@ -10,7 +10,6 @@ Welcome to **Usman Clothes House** – your ultimate online destination for **pr
 
 🔗 [Visit Website](https://usman-clothes-house.netlify.app/)
 
-> ✨ Try browsing products, placing test orders, or exploring the admin dashboard for a complete experience!
 
 ---
 
