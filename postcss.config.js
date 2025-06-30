@@ -1,7 +1,7 @@
-// postcss.config.js
-module.exports = {
+// ✅ This is the correct ESM export for Vite + Tailwind
+export default {
   plugins: {
     tailwindcss: {},
     autoprefixer: {},
   },
-}
+};
