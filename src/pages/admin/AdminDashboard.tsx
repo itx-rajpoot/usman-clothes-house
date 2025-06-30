@@ -74,7 +74,7 @@ const AdminDashboard = () => {
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
             <Link to="/">
-              <Button variant="outline" className="text-amber-600 border-white hover:bg-white">
+              <Button variant="outline" className="hover:text-amber-600 text-white border-white hover:bg-white">
                 <Eye className="h-4 w-4 mr-2" />
                 View Store
               </Button>

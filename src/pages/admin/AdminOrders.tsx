@@ -119,8 +119,8 @@ const AdminOrders = () => {
     return new Date(timestamp).toLocaleDateString();
   };
 
-  const filteredOrders = filterStatus === 'all' 
-    ? orders 
+  const filteredOrders = filterStatus === 'all'
+    ? orders
     : orders.filter(order => order.status === filterStatus);
 
   if (loading) {
@@ -138,7 +138,7 @@ const AdminOrders = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Link to="/admin" className="mr-4">
-                <Button variant="outline" className="text-amber-600 border-white hover:bg-white">
+                <Button variant="outline" className="border-white hover:bg-white hover:text-amber-600 text-white">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back
                 </Button>
@@ -152,17 +152,23 @@ const AdminOrders = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-6">
           <Select value={filterStatus} onValueChange={setFilterStatus}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-48 bg-white border border-gray-300 shadow-sm">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-white shadow-lg border border-gray-200">
               {statusOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem
+                  key={option.value}
+                  value={option.value}
+                  className="hover:bg-amber-100 hover:text-amber-700 cursor-pointer pl-10 pr-4 py-2 rounded-md transition-colors duration-200"
+                >
                   {option.label}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+
+
         </div>
 
         <div className="space-y-6">
@@ -251,7 +257,7 @@ const AdminOrders = () => {
                       <SelectItem value="delivered">Delivered</SelectItem>
                     </SelectContent>
                   </Select>
-                  
+
                   <a href={`https://wa.me/${order.customerInfo.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="text-green-600">
                       <Phone className="h-4 w-4 mr-2" />

@@ -237,7 +237,7 @@ const AdminProducts = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Link to="/admin" className="mr-4">
-                <Button variant="outline" className="text-amber-600 border-white hover:bg-white">
+                <Button variant="outline" className="hover:text-amber-600 text-white border-white hover:bg-white">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back
                 </Button>
@@ -248,10 +248,10 @@ const AdminProducts = () => {
               <DialogTrigger asChild>
                 <Button 
                   variant="outline" 
-                  className="text-amber-600 border-white hover:bg-white"
+                  className="hover:text-amber-600 text-white border-white hover:bg-white"
                   onClick={resetForm}
                 >
-                  <Plus className="h-4 w-4 mr-2" />
+                  <Plus className="h-4 w-4 mr-2 " />
                   Add Product
                 </Button>
               </DialogTrigger>

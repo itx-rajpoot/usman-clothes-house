@@ -36,12 +36,13 @@ const AppContent = () => {
   const location = useLocation();
 
   // Paths where you DON'T want Header and Footer
-  const noHeaderFooterPaths = ["/login", "/signup", "/forgot-password"];
-  const hideHeaderFooter = noHeaderFooterPaths.includes(location.pathname);
+  const noHeaderFooter =
+    ["/login", "/signup", "/forgot-password"].includes(location.pathname) ||
+    location.pathname.startsWith("/admin");
 
   return (
     <>
-      {!hideHeaderFooter && <Header />}
+      {!noHeaderFooter && <Header />}
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/products" element={<Products />} />
@@ -130,7 +131,7 @@ const AppContent = () => {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {!hideHeaderFooter && <Footer />}
+      {!noHeaderFooter  && <Footer />}
     </>
   );
 };

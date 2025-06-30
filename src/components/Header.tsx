@@ -82,10 +82,10 @@ const Header = () => {
             ) : (
               <div className="flex items-center space-x-2">
                 <Link to="/login">
-                  <Button variant="outline" size="sm">Login</Button>
+                  <Button variant="outline" className='text-amber-800 hover:bg-amber-100' size="sm">Login</Button>
                 </Link>
                 <Link to="/signup">
-                  <Button size="sm" className="bg-amber-600 hover:bg-amber-700">
+                  <Button size="sm" className="text-white bg-amber-600 hover:bg-amber-700">
                     Sign Up
                   </Button>
                 </Link>

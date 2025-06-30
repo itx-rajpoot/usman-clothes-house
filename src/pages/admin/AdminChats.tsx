@@ -165,7 +165,7 @@ const AdminChats = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center">
             <Link to="/admin" className="mr-4">
-              <Button variant="outline" className="text-amber-600 border-white hover:bg-white">
+              <Button variant="outline" className="hover:text-amber-600 text-white border-white hover:bg-white">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
@@ -199,7 +199,7 @@ const AdminChats = () => {
                     <div
                       key={user.userId}
                       onClick={() => setSelectedUser(user)}
-                      className={`p-4 border-b cursor-pointer hover:bg-gray-50 ${selectedUser?.userId === user.userId ? 'bg-amber-50' : ''
+                      className={`p-4 mt-2 rounded-lg border cursor-pointer transition-shadow hover:shadow-md hover:bg-gray-50 ${selectedUser?.userId === user.userId ? 'bg-amber-50 border-amber-300' : 'border-gray-200'
                         }`}
                     >
                       <div className="font-semibold">{user.email}</div>
@@ -240,8 +240,8 @@ const AdminChats = () => {
                         >
                           <div
                             className={`max-w-xs p-3 rounded-lg ${message.isAdmin
-                                ? 'bg-amber-600 text-white'
-                                : 'bg-gray-100 text-gray-800'
+                              ? 'bg-amber-600 text-white'
+                              : 'bg-gray-100 text-gray-800'
                               }`}
                           >
                             <p className="text-sm">{message.text}</p>

@@ -58,7 +58,7 @@ const AdminSliders = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       if (editingSlider) {
         await updateDoc(doc(db, 'sliders', editingSlider.id), formData);
@@ -146,7 +146,7 @@ const AdminSliders = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Link to="/admin" className="mr-4">
-                <Button variant="outline" className="text-amber-600 border-white hover:bg-white">
+                <Button variant="outline" className="hover:text-amber-600 text-white border-white hover:bg-white">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back
                 </Button>
@@ -155,16 +155,16 @@ const AdminSliders = () => {
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  className="text-amber-600 border-white hover:bg-white"
+                <Button
+                  variant="outline"
+                  className="text-white hover:text-amber-600 border-white hover:bg-white"
                   onClick={resetForm}
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add Slider
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className='text-white' >
                 <DialogHeader>
                   <DialogTitle>
                     {editingSlider ? 'Edit Slider' : 'Add New Slider'}
@@ -174,6 +174,7 @@ const AdminSliders = () => {
                   <div>
                     <Label htmlFor="imageUrl">Image URL *</Label>
                     <Input
+                      className="placeholder:text-gray-400 text-black"
                       id="imageUrl"
                       name="imageUrl"
                       value={formData.imageUrl}
@@ -182,10 +183,11 @@ const AdminSliders = () => {
                       placeholder="https://example.com/image.jpg"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="title">Title *</Label>
                     <Input
+                      className="placeholder:text-gray-400 text-black"
                       id="title"
                       name="title"
                       value={formData.title}
@@ -194,10 +196,11 @@ const AdminSliders = () => {
                       placeholder="Main title for the slider"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="subtitle">Subtitle *</Label>
                     <Input
+                      className="placeholder:text-gray-400 text-black"
                       id="subtitle"
                       name="subtitle"
                       value={formData.subtitle}
@@ -206,7 +209,7 @@ const AdminSliders = () => {
                       placeholder="Subtitle or description"
                     />
                   </div>
-                  
+
                   <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700">
                     {editingSlider ? 'Update Slider' : 'Add Slider'}
                   </Button>

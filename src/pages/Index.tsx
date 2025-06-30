@@ -243,7 +243,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-8">
             <Link to="/products">
-              <Button size="lg" variant="outline">
+              <Button className='hover:bg-amber-100' size="lg" variant="outline">
                 View All Products
               </Button>
             </Link>
