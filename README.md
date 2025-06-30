@@ -2,7 +2,7 @@
 
 Welcome to **Usman Clothes House** – your ultimate online destination for **premium unstitched clothes** that combine **comfort, culture, and class**. Whether you're shopping for yourself or someone special, we offer a smooth, modern experience both online and in-store.
 
-![Usman Clothes House Logo](./public/logo.png) <!-- TODO: Replace with hosted logo or keep in public folder -->
+![Usman Clothes House Logo](./public/favicon.ico) <!-- TODO: Replace with hosted logo or keep in public folder -->
 
 ---
 
