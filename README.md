@@ -1,73 +1,123 @@
-# Welcome to your Lovable project
+# 👕 Usman Clothes House
 
-## Project info
+Welcome to **Usman Clothes House** – your ultimate online destination for **premium unstitched clothes** that combine **comfort, culture, and class**. Whether you're shopping for yourself or someone special, we offer a smooth, modern experience both online and in-store.
 
-**URL**: https://lovable.dev/projects/eabb0f89-0c10-41ea-a9bb-968ed3ad497c
+![Usman Clothes House Logo](./public/favicon.ico) <!-- TODO: Replace with hosted logo or keep in public folder -->
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🌐 Live Demo
 
-**Use Lovable**
+🔗 [Visit Website](https://usman-clothes-house.netlify.app/)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/eabb0f89-0c10-41ea-a9bb-968ed3ad497c) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+<!-- ## 📸 Screenshots
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+<!-- TODO: Add screenshots later if needed
+| Home Page                             | Dashboard (Admin Panel)                  |
+|--------------------------------------|------------------------------------------|
+| ![Home](./screenshots/home.png)      | ![Dashboard](./screenshots/dashboard.png) |
+-->
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🧾 About the Website
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+**Usman Clothes House** is a full-featured eCommerce platform focused on the **sale of unstitched garments**. Designed with a balance of simplicity and sophistication, it offers:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- A responsive shopping experience
+- Live admin control
+- Real-time messaging
+- Order tracking
+- Offline shop details
 
-# Step 3: Install the necessary dependencies.
-npm i
+Whether you're a customer or administrator, everything is built to be intuitive and efficient.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+---
 
-**Edit a file directly in GitHub**
+## 🏬 About the Shop
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Located in the heart of the city, **Usman Clothes House** has built a reputation for selling **quality fabrics at fair prices**. With a legacy of trust and craftsmanship, our mission is to bring the in-store experience to your fingertips.
 
-**Use GitHub Codespaces**
+📍 **Location:** main street, Chak no. 60 RB, Balochani, District FSD, Punjab, Pakistan  
+🕒 **Timings:** All Week: 9:00 AM - 7:00 PM, Friday: 9:00 AM - 12:00 PM then 3:00 PM - 7:00 PM  
+📞 **WhatsApp:** +92 304 671 3045
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 🔐 About the Dashboard
 
-This project is built with:
+Our **Admin Dashboard** is built for ease and power. Admins have complete access to manage:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- 🧵 Product listings  
+- 🎞️ Slider banners  
+- 📦 Customer orders  
+- 💬 Chat system with buyers  
+- ✅ Order verification and removal  
 
-## How can I deploy this project?
+It provides all the essential tools to run the shop smoothly, whether you're in the store or working remotely.
 
-Simply open [Lovable](https://lovable.dev/projects/eabb0f89-0c10-41ea-a9bb-968ed3ad497c) and click on Share -> Publish.
+---
 
-## Can I connect a custom domain to my Lovable project?
+## 🚀 Features
 
-Yes, you can!
+### 🛒 Customer Features
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- ✅ **Browse Products**: View unstitched clothes with categories, images, and prices
+- 🛍️ **Add to Cart & Place Orders**: Seamless order placement and checkout
+- 🧑‍💻 **Account Management**: Login, Signup, Password Reset & Change Password
+- 🔔 **Notifications**: Receive real-time order and chat notifications
+- 💬 **Chat**: Communicate with store admin directly
+- 📱 **WhatsApp Displayed**: Contact admin via WhatsApp for direct queries
+- 📱 **Mobile Optimized**: Responsive design works across all devices
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### 🛠️ Admin Features
+
+- 🔐 Secure Admin Login
+- ➕ Add / ✏️ Edit / ❌ Delete Products
+- 🎞️ Manage Homepage Sliders (images + titles)
+- 📦 View & Manage All Orders
+- 💬 Two-way Buyer Chat with notification badges
+- ✅ Remove Orders After Delivery/Confirmation
+- 📇 Access buyer data including WhatsApp
+
+### 🏪 Offline Store Info
+
+- 📝 **About Us Page**: Brand mission, store history
+- 📍 **Location Info**: Shop address with map (Google Maps embeddable)
+- 🕐 **Timings**: Opening/Closing hours clearly shown
+- 📞 **Contact Us Page**: Form + contact details
+
+---
+
+## 🛠️ Tech Stack
+
+| Category       | Tech Used                       |
+|----------------|----------------------------------|
+| Frontend       | React.js, TypeScript, Tailwind CSS, ShadCN UI |
+| State & Auth   | Firebase Authentication, Context API |
+| Database       | Firebase Firestore              |
+| File Storage   | Firebase Storage                |
+| Chat / Realtime| Firestore Realtime Chat         |
+| Icons          | Lucide React                    |
+| Routing        | React Router DOM                |
+| Styling        | Tailwind CSS with HSL-based design tokens |
+
+---
+
+## 📬 Contact
+
+For support, feedback, or business collaboration, feel free to reach out to the developer directly:
+
+- 📧 **Email**: ranazohaib6210@gmail.com
+- 📱 **WhatsApp**: +92-306-9259523
+- 💼 **Developer**: Muhammad Zohaibb
+- 🌐 **LinkedIn**: [linkedin.com/in/rana-zohaib](https://www.linkedin.com/in/rana-zohaib-677183287/)  
+"""
+
+---
+
+> 🧵 Built with 💙 by **M. Zohaib** for the love of modern web and classic Pakistani fashion.
+"""
