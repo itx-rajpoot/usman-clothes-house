@@ -247,19 +247,37 @@ const AdminOrders = () => {
                     value={order.status}
                     onValueChange={(value) => updateOrderStatus(order.id, value)}
                   >
-                    <SelectTrigger className="w-48">
+                    <SelectTrigger className="w-48 bg-white border border-gray-300 shadow-sm">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="confirmed">Confirmed</SelectItem>
-                      <SelectItem value="delivering">Delivering</SelectItem>
-                      <SelectItem value="delivered">Delivered</SelectItem>
+                    <SelectContent className="bg-white shadow-lg border border-gray-200">
+                      <SelectItem
+                        value="pending"
+                        className="hover:bg-amber-100 hover:text-amber-700 cursor-pointer pl-10 pr-4 py-2 rounded-md transition-colors duration-200" >
+                        Pending
+                      </SelectItem>
+                      <SelectItem
+                        value="confirmed"
+                        className="hover:bg-amber-100 hover:text-amber-700 cursor-pointer pl-10 pr-4 py-2 rounded-md transition-colors duration-200" >
+                        Confirmed
+                      </SelectItem>
+                      <SelectItem
+                        value="delivering"
+                        className="hover:bg-amber-100 hover:text-amber-700 cursor-pointer pl-10 pr-4 py-2 rounded-md transition-colors duration-200" >
+                        Delivering
+                      </SelectItem>
+                      <SelectItem
+                        value="delivered"
+                        className="hover:bg-amber-100 hover:text-amber-700 cursor-pointer pl-10 pr-4 py-2 rounded-md transition-colors duration-200" >
+                        Delivered
+                      </SelectItem>
                     </SelectContent>
                   </Select>
 
                   <a href={`https://wa.me/${order.customerInfo.phone.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer">
-                    <Button variant="outline" className="text-green-600">
+                    <Button
+                      variant="outline"
+                      className="text-green-600 border-green-600 hover:bg-green-100 hover:text-green-700 transition-colors duration-200" >
                       <Phone className="h-4 w-4 mr-2" />
                       WhatsApp
                     </Button>
