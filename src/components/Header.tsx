@@ -30,9 +30,10 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           <Link
             to="/"
-            className="flex items-center space-x-2 text-2xl font-bold text-amber-800 transition duration-300 hover:scale-105 hover:text-amber-700">
-            <img src={logo} alt="Logo" className="h-8 w-8 object-contain" />
-            <span>Usman Clothes House</span>
+            className="flex items-center space-x-2 text-xl sm:text-2xl font-bold text-amber-800 transition duration-300 hover:scale-105 hover:text-amber-700 whitespace-nowrap overflow-hidden"
+          >
+            <img src={logo} alt="Logo" className="h-8 w-8 object-contain shrink-0" />
+            <span className="truncate max-w-[150px] sm:max-w-none">Usman Clothes House</span>
           </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -102,20 +103,56 @@ const Header = () => {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
-            <nav className="flex flex-col space-y-2">
-              <Link to="/" className="text-gray-700 hover:text-amber-800 py-2">
+          <div className="md:hidden bg-white border-t border-gray-200 shadow-md">
+            <nav className="flex flex-col p-4 space-y-4">
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-gray-700 hover:text-amber-800">
                 Home
               </Link>
-              <Link to="/products" className="text-gray-700 hover:text-amber-800 py-2">
+              <Link to="/products" onClick={() => setIsMenuOpen(false)} className="text-gray-700 hover:text-amber-800">
                 Products
               </Link>
-              <Link to="/about" className="text-gray-700 hover:text-amber-800 py-2">
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-gray-700 hover:text-amber-800">
                 About
               </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-amber-800 py-2">
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="text-gray-700 hover:text-amber-800">
                 Contact
               </Link>
+
+              {/* Cart */}
+              {currentUser && !isAdmin && (
+                <Link to="/cart" onClick={() => setIsMenuOpen(false)} className="flex items-center text-gray-700 hover:text-amber-800">
+                  <ShoppingCart className="h-5 w-5 mr-2" />
+                  Cart ({cartItemsCount})
+                </Link>
+              )}
+
+              {/* Auth Actions */}
+              {currentUser ? (
+                <div className="space-y-2">
+                  {isAdmin ? (
+                    <Link to="/admin" onClick={() => setIsMenuOpen(false)}>
+                      <Button variant="outline" className="w-full">Dashboard</Button>
+                    </Link>
+                  ) : (
+                    <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center text-gray-700 hover:text-amber-800">
+                      <User className="h-5 w-5 mr-2" />
+                      Profile
+                    </Link>
+                  )}
+                  <Button onClick={handleLogout} variant="outline" size="sm" className="w-full">
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                    <Button variant="outline" className="w-full text-amber-800 hover:bg-amber-100" size="sm">Login</Button>
+                  </Link>
+                  <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="w-full text-white bg-amber-600 hover:bg-amber-700" size="sm">Sign Up</Button>
+                  </Link>
+                </div>
+              )}
             </nav>
           </div>
         )}

@@ -135,7 +135,7 @@ const AdminOrders = () => {
     <div className="min-h-screen bg-gray-50">
       <div className="bg-amber-600 text-white py-6">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 sm:gap-0">
             <div className="flex items-center">
               <Link to="/admin" className="mr-4">
                 <Button variant="outline" className="border-white hover:bg-white hover:text-amber-600 text-white">
@@ -149,8 +149,8 @@ const AdminOrders = () => {
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-6">
+      <div className="container mx-auto px-4 sm:px-6 py-8">
+        <div className="mb-6 max-w-xs">
           <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-48 bg-white border border-gray-300 shadow-sm">
               <SelectValue placeholder="Filter by status" />
@@ -197,18 +197,18 @@ const AdminOrders = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <CardContent className="p-4 sm:p-6">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                   {/* Customer Information */}
                   <div>
                     <h4 className="font-semibold mb-3">Customer Information</h4>
                     <div className="space-y-2 text-sm">
                       <p><strong>Name:</strong> {order.customerInfo.fullName}</p>
-                      <p className="flex items-center">
+                      <p className="flex items-center break-words">
                         <Mail className="h-4 w-4 mr-1" />
                         {order.customerInfo.email}
                       </p>
-                      <p className="flex items-center">
+                      <p className="flex items-center break-words">
                         <Phone className="h-4 w-4 mr-1" />
                         {order.customerInfo.phone}
                       </p>
@@ -242,7 +242,7 @@ const AdminOrders = () => {
                 </div>
 
                 {/* Order Actions */}
-                <div className="mt-6 flex space-x-2">
+                <div className="mt-6 flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
                   <Select
                     value={order.status}
                     onValueChange={(value) => updateOrderStatus(order.id, value)}

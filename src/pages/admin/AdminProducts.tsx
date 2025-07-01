@@ -20,12 +20,22 @@ interface Product {
   name: string;
   price: number;
   image: string;
+  mainCategory: string;
   category: string;
   description: string;
   stock: number;
 }
 
 const AdminProducts = () => {
+
+  const subCategoryOptions: { [key: string]: string[] } = {
+    Men: ['Latha', 'Linen', 'Lawn', 'Wash and Wear', 'Others'],
+    Women: ['Silk', 'Cotton', 'Chiffon', 'Lawn', 'Linen', 'Others'],
+    'Home Essentials': ['Towels', 'Bedsheets', 'Others'],
+  };
+
+
+
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(['Lawn', 'Cotton', 'Silk', 'Chiffon', 'Linen', 'Others']);
@@ -39,6 +49,7 @@ const AdminProducts = () => {
     name: '',
     price: '',
     image: '',
+    mainCategory: '',
     category: '',
     description: '',
     stock: ''
@@ -68,7 +79,7 @@ const AdminProducts = () => {
           createdAt: new Date()
         });
         setCategories([...categories, customCategory.trim()]);
-        setFormData({...formData, category: customCategory.trim()});
+        setFormData({ ...formData, category: customCategory.trim() });
         setCustomCategory('');
         setShowCustomCategory(false);
         toast({
@@ -115,17 +126,19 @@ const AdminProducts = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const productData = {
         productId: formData.productId,
         name: formData.name,
         price: parseFloat(formData.price),
         image: formData.image,
+        mainCategory: formData.mainCategory, // ADD THIS
         category: formData.category,
         description: formData.description,
         stock: parseInt(formData.stock)
       };
+
 
       if (editingProduct) {
         await updateDoc(doc(db, 'products', editingProduct.id), productData);
@@ -148,6 +161,7 @@ const AdminProducts = () => {
         name: '',
         price: '',
         image: '',
+        mainCategory: '',
         category: '',
         description: '',
         stock: ''
@@ -164,18 +178,35 @@ const AdminProducts = () => {
   };
 
   const handleEdit = (product: Product) => {
+    const mainCategory = product.mainCategory || '';
+    const defaultSubcategories =
+      subCategoryOptions[mainCategory as keyof typeof subCategoryOptions] || [];
+
     setEditingProduct(product);
     setFormData({
       productId: product.productId || '',
       name: product.name,
       price: product.price.toString(),
       image: product.image,
+      mainCategory: mainCategory,
       category: product.category,
       description: product.description,
       stock: product.stock.toString()
     });
+
+    if (product.category && !defaultSubcategories.includes(product.category)) {
+      setShowCustomCategory(true);
+      setCustomCategory(product.category);
+    } else {
+      setShowCustomCategory(false);
+      setCustomCategory('');
+    }
+
     setDialogOpen(true);
   };
+
+
+
 
   const handleDelete = async (productId: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -205,6 +236,7 @@ const AdminProducts = () => {
       price: '',
       image: '',
       category: '',
+      mainCategory: '',
       description: '',
       stock: ''
     });
@@ -215,10 +247,10 @@ const AdminProducts = () => {
   const handleCategoryChange = (value: string) => {
     if (value === 'Others') {
       setShowCustomCategory(true);
-      setFormData({...formData, category: ''});
+      setFormData({ ...formData, category: '' });
     } else {
       setShowCustomCategory(false);
-      setFormData({...formData, category: value});
+      setFormData({ ...formData, category: value });
     }
   };
 
@@ -246,8 +278,8 @@ const AdminProducts = () => {
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="hover:text-amber-600 text-white border-white hover:bg-white"
                   onClick={resetForm}
                 >
@@ -255,17 +287,18 @@ const AdminProducts = () => {
                   Add Product
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="text-white max-w-full sm:max-w-2xl px-4">
                 <DialogHeader>
                   <DialogTitle>
                     {editingProduct ? 'Edit Product' : 'Add New Product'}
                   </DialogTitle>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                       <Label htmlFor="productId">Product ID *</Label>
                       <Input
+                        className="text-black"
                         id="productId"
                         name="productId"
                         value={formData.productId}
@@ -277,6 +310,7 @@ const AdminProducts = () => {
                     <div>
                       <Label htmlFor="name">Product Name *</Label>
                       <Input
+                        className="text-black"
                         id="name"
                         name="name"
                         value={formData.name}
@@ -285,11 +319,12 @@ const AdminProducts = () => {
                       />
                     </div>
                   </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
                       <Label htmlFor="price">Price (Rs.) *</Label>
                       <Input
+                        className="text-black"
                         id="price"
                         name="price"
                         type="number"
@@ -301,6 +336,7 @@ const AdminProducts = () => {
                     <div>
                       <Label htmlFor="stock">Stock Quantity *</Label>
                       <Input
+                        className="text-black"
                         id="stock"
                         name="stock"
                         type="number"
@@ -310,10 +346,11 @@ const AdminProducts = () => {
                       />
                     </div>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="image">Image URL *</Label>
                     <Input
+                      className="text-black"
                       id="image"
                       name="image"
                       value={formData.image}
@@ -322,44 +359,70 @@ const AdminProducts = () => {
                       placeholder="https://example.com/image.jpg"
                     />
                   </div>
-                  
+
                   <div>
-                    <Label htmlFor="category">Category *</Label>
-                    <Select value={formData.category} onValueChange={handleCategoryChange}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
+                    <Label htmlFor="mainCategory">Main Category *</Label>
+                    <Select
+                      value={formData.mainCategory}
+                      onValueChange={(value) => {
+                        setFormData({ ...formData, mainCategory: value, category: '' });
+                        setShowCustomCategory(false); // reset custom
+                      }} >
+                      <SelectTrigger className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-black focus:ring-2 focus:ring-amber-500">
+                        <SelectValue placeholder="Select main category" />
                       </SelectTrigger>
-                      <SelectContent>
-                        {categories.map((category) => (
-                          <SelectItem key={category} value={category}>
-                            {category}
+                      <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-md text-black">
+                        {Object.keys(subCategoryOptions).map((main) => (
+                          <SelectItem key={main} value={main}>
+                            {main}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                    
-                    {showCustomCategory && (
-                      <div className="mt-2 flex gap-2">
-                        <Input
-                          placeholder="Enter custom category"
-                          value={customCategory}
-                          onChange={(e) => setCustomCategory(e.target.value)}
-                        />
-                        <Button
-                          type="button"
-                          onClick={addCustomCategory}
-                          size="sm"
-                          className="bg-amber-600 hover:bg-amber-700"
-                        >
-                          <Tag className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
                   </div>
-                  
+
+                  {formData.mainCategory && (
+                    <div className="mt-4">
+                      <Label htmlFor="category">Subcategory *</Label>
+                      <Select value={formData.category} onValueChange={handleCategoryChange}>
+                        <SelectTrigger className="w-full border border-gray-300 rounded-md px-3 py-2 bg-white text-black focus:ring-2 focus:ring-amber-500">
+                          <SelectValue placeholder="Select subcategory" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white border border-gray-200 shadow-lg rounded-md text-black">
+                          {subCategoryOptions[formData.mainCategory]?.map((sub) => (
+                            <SelectItem key={sub} value={sub}>
+                              {sub}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      {showCustomCategory && (
+                        <div className="mt-2 flex gap-2">
+                          <Input
+                            className="text-black"
+                            placeholder="Enter custom category"
+                            value={customCategory}
+                            onChange={(e) => setCustomCategory(e.target.value)}
+                          />
+                          <Button
+                            type="button"
+                            onClick={addCustomCategory}
+                            size="sm"
+                            className="bg-amber-600 hover:bg-amber-700"
+                          >
+                            <Tag className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+
                   <div>
                     <Label htmlFor="description">Description *</Label>
                     <Textarea
+                      className="text-black"
                       id="description"
                       name="description"
                       value={formData.description}
@@ -368,7 +431,7 @@ const AdminProducts = () => {
                       rows={4}
                     />
                   </div>
-                  
+
                   <Button type="submit" className="w-full bg-amber-600 hover:bg-amber-700">
                     {editingProduct ? 'Update Product' : 'Add Product'}
                   </Button>
@@ -380,7 +443,7 @@ const AdminProducts = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((product) => (
             <Card key={product.id} className="hover:shadow-lg transition-shadow">
               <CardContent className="p-0">
@@ -388,7 +451,7 @@ const AdminProducts = () => {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-48 object-cover"
+                    className="w-full h-40 sm:h-48 object-cover"
                   />
                   <Badge className="absolute top-2 left-2 bg-amber-600">
                     {product.category}
@@ -404,7 +467,7 @@ const AdminProducts = () => {
                     </Badge>
                   )}
                 </div>
-                <div className="p-4">
+                <div className="p-3 sm:p-4">
                   <h3 className="font-semibold text-gray-800 mb-2">{product.name}</h3>
                   <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between mb-3">
@@ -415,7 +478,7 @@ const AdminProducts = () => {
                       Stock: {product.stock}
                     </span>
                   </div>
-                  <div className="flex space-x-2">
+                  <div className="flex flex-col sm:flex-row sm:space-x-2 space-y-2 sm:space-y-0">
                     <Button
                       onClick={() => handleEdit(product)}
                       variant="outline"
