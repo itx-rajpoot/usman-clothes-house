@@ -1,7 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { collection, onSnapshot, addDoc, query, orderBy, where, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  query,
+  orderBy,
+  where,
+  getDocs,
+  deleteDoc,
+  doc,
+} from 'firebase/firestore';
 import { db } from '../../firebase';
 import { Button } from '../../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
@@ -13,8 +23,9 @@ import { useToast } from '../../hooks/use-toast';
 interface Message {
   id: string;
   text: string;
-  senderId: string;
+  senderId?: string;  // optional, for guests
   senderEmail: string;
+  senderName?: string; // for guests
   timestamp: any;
   isAdmin: boolean;
   participants: string[];
@@ -22,7 +33,7 @@ interface Message {
 
 interface ChatUser {
   email: string;
-  userId: string;
+  userId?: string;  // optional for guests
   lastMessage?: string;
   lastMessageTime?: any;
   unreadCount?: number;
@@ -44,9 +55,12 @@ const AdminChats = () => {
   useEffect(() => {
     if (selectedUser) {
       const messagesRef = collection(db, 'chats');
+      // Use selectedUser.userId if exists, else 'guest' to query messages
+      const participantId = selectedUser.userId || 'guest';
+
       const q = query(
         messagesRef,
-        where('participants', 'array-contains', selectedUser.userId),
+        where('participants', 'array-contains', participantId),
         orderBy('timestamp', 'asc')
       );
 
@@ -62,20 +76,17 @@ const AdminChats = () => {
     }
   }, [selectedUser]);
 
-  // Auto-delete messages older than 2 days
+  // Auto-delete old messages — unchanged
   useEffect(() => {
     const deleteOldMessages = async () => {
       const twoDaysAgo = new Date();
       twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
 
       try {
-        const q = query(
-          collection(db, 'chats'),
-          where('timestamp', '<', twoDaysAgo)
-        );
+        const q = query(collection(db, 'chats'), where('timestamp', '<', twoDaysAgo));
 
         const querySnapshot = await getDocs(q);
-        const deletePromises = querySnapshot.docs.map(docSnapshot =>
+        const deletePromises = querySnapshot.docs.map((docSnapshot) =>
           deleteDoc(doc(db, 'chats', docSnapshot.id))
         );
 
@@ -86,9 +97,9 @@ const AdminChats = () => {
       }
     };
 
-    // Run cleanup every hour
+
     const interval = setInterval(deleteOldMessages, 60 * 60 * 1000);
-    deleteOldMessages(); // Run once immediately
+    deleteOldMessages();
 
     return () => clearInterval(interval);
   }, []);
@@ -100,14 +111,23 @@ const AdminChats = () => {
 
       chatsSnapshot.forEach((doc) => {
         const message = doc.data() as Message;
+
         if (!message.isAdmin && message.senderEmail) {
-          const existing = userMap.get(message.senderId);
-          if (!existing || (message.timestamp && message.timestamp > existing.lastMessageTime)) {
-            userMap.set(message.senderId, {
+          // Determine unique key: senderId if exists else senderEmail for guests
+          const key = message.senderId || message.senderEmail;
+
+          const existing = userMap.get(key);
+
+          // Only update if this message is newer
+          if (
+            !existing ||
+            (message.timestamp && message.timestamp > existing.lastMessageTime)
+          ) {
+            userMap.set(key, {
               email: message.senderEmail,
-              userId: message.senderId,
+              userId: message.senderId, // will be undefined for guests
               lastMessage: message.text,
-              lastMessageTime: message.timestamp
+              lastMessageTime: message.timestamp,
             });
           }
         }
@@ -122,27 +142,31 @@ const AdminChats = () => {
   };
 
   const sendMessage = async () => {
-    if (!newMessage.trim() || !selectedUser || !currentUser) return;
+  if (!newMessage.trim() || !selectedUser || !currentUser) return;
 
-    try {
-      await addDoc(collection(db, 'chats'), {
-        text: newMessage,
-        senderId: currentUser.uid,
-        senderEmail: currentUser.email,
-        timestamp: new Date(),
-        isAdmin: true,
-        participants: [currentUser.uid, selectedUser.userId]
-      });
-      setNewMessage('');
-    } catch (error) {
-      console.error('Error sending message:', error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
+  try {
+    await addDoc(collection(db, 'chats'), {
+      text: newMessage,
+      senderId: currentUser.uid,
+      senderEmail: currentUser.email,
+      timestamp: new Date(),
+      isAdmin: true,
+      participants: [currentUser.uid, selectedUser.userId || 'guest'],
+    });
+
+    setNewMessage('');
+    fetchChatUsers(); // Re-fetch chat list with updated last message
+    setSelectedUser({ ...selectedUser }); // Trigger useEffect to refresh chat instantly
+  } catch (error) {
+    console.error('Error sending message:', error);
+    toast({
+      title: 'Error',
+      description: 'Failed to send message. Please try again.',
+      variant: 'destructive',
+    });
+  }
+};
+
 
   const formatDate = (timestamp: any) => {
     if (timestamp?.toDate) {
@@ -165,7 +189,10 @@ const AdminChats = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center">
             <Link to="/admin" className="mr-4">
-              <Button variant="outline" className="hover:text-amber-600 text-white border-white hover:bg-white">
+              <Button
+                variant="outline"
+                className="hover:text-amber-600 text-white border-white hover:bg-white"
+              >
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
@@ -191,27 +218,22 @@ const AdminChats = () => {
             <CardContent className="p-0">
               <div className="max-h-[500px] overflow-y-auto">
                 {users.length === 0 ? (
-                  <div className="p-4 text-center text-gray-500">
-                    No conversations found
-                  </div>
+                  <div className="p-4 text-center text-gray-500">No conversations found</div>
                 ) : (
                   users.map((user) => (
                     <div
-                      key={user.userId}
+                      key={user.userId || user.email} // fallback key for guests
                       onClick={() => setSelectedUser(user)}
-                      className={`p-4 mt-2 rounded-lg border cursor-pointer transition-shadow hover:shadow-md hover:bg-gray-50 ${selectedUser?.userId === user.userId ? 'bg-amber-50 border-amber-300' : 'border-gray-200'
-                        }`}
+                      className={`p-4 mt-2 rounded-lg border cursor-pointer transition-shadow hover:shadow-md hover:bg-gray-50 ${
+                        selectedUser?.userId === user.userId ? 'bg-amber-50 border-amber-300' : 'border-gray-200'
+                      }`}
                     >
                       <div className="font-semibold">{user.email}</div>
                       {user.lastMessage && (
-                        <div className="text-sm text-gray-600 truncate">
-                          {user.lastMessage}
-                        </div>
+                        <div className="text-sm text-gray-600 truncate">{user.lastMessage}</div>
                       )}
                       {user.lastMessageTime && (
-                        <div className="text-xs text-gray-400">
-                          {formatDate(user.lastMessageTime)}
-                        </div>
+                        <div className="text-xs text-gray-400">{formatDate(user.lastMessageTime)}</div>
                       )}
                     </div>
                   ))
@@ -224,9 +246,7 @@ const AdminChats = () => {
           <div className="lg:col-span-2">
             <Card className="h-full">
               <CardHeader>
-                <CardTitle>
-                  {selectedUser ? `Chat with ${selectedUser.email}` : 'Select a conversation'}
-                </CardTitle>
+                <CardTitle>{selectedUser ? `Chat with ${selectedUser.email}` : 'Select a conversation'}</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col h-[500px]">
                 {selectedUser ? (
@@ -239,15 +259,12 @@ const AdminChats = () => {
                           className={`flex ${message.isAdmin ? 'justify-end' : 'justify-start'}`}
                         >
                           <div
-                            className={`max-w-xs p-3 rounded-lg ${message.isAdmin
-                              ? 'bg-amber-600 text-white'
-                              : 'bg-gray-100 text-gray-800'
-                              }`}
+                            className={`max-w-xs p-3 rounded-lg ${
+                              message.isAdmin ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-800'
+                            }`}
                           >
                             <p className="text-sm">{message.text}</p>
-                            <p className="text-xs mt-1 opacity-70">
-                              {formatDate(message.timestamp)}
-                            </p>
+                            <p className="text-xs mt-1 opacity-70">{formatDate(message.timestamp)}</p>
                           </div>
                         </div>
                       ))}

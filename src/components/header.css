@@ -1,0 +1,17 @@
+/* Header.css */
+@media (max-width: 420px) {
+  header * {
+    font-size: 13px !important;
+  }
+
+  header .btn,
+  header button,
+  header a {
+    padding: 0.3rem 0.6rem !important;
+  }
+
+  header svg {
+    height: 18px !important;
+    width: 18px !important;
+  }
+}

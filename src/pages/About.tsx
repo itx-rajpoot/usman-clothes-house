@@ -5,58 +5,65 @@ import { Card, CardContent } from '../components/ui/card';
 import ChatWidget from '../components/ChatWidget';
 
 const About = () => {
+    const isMobile = window.innerWidth < 640;
+
   return (
     <div className="min-h-screen bg-gray-50">
-
+      
       {/* Hero Section */}
-      <section className="bg-amber-600 text-white py-12 px-4 lg:py-16">
+      <section className="bg-amber-600 text-white py-8 px-4 lg:py-16">
         <div className="container mx-auto text-center max-w-3xl">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-4">About Usman Clothes House</h1>
-          <p className="text-base sm:text-xl leading-relaxed">
-            Your trusted destination for premium quality unstitched fabrics since 1995.
-            We bring you the finest collection of fabrics from across Pakistan.
+          <h1 className={`${isMobile ? 'text-2xl' : 'text-4xl'} font-bold mb-4`}>
+            {isMobile ? 'About Usman House' : 'About Usman Clothes House'}
+          </h1>
+          <p className={`${isMobile ? 'text-sm' : 'text-xl'} leading-relaxed`}>
+            {isMobile
+              ? 'Top-quality unstitched fabrics since 1995.'
+              : 'Your trusted destination for premium quality unstitched fabrics since 1995. We bring you the finest collection of fabrics from across Pakistan.'}
           </p>
         </div>
       </section>
 
       {/* Story Section */}
-      <section className="py-12 px-4 lg:py-16">
+      <section className="py-10 px-4 lg:py-16">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
             <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6">
-                Our Story
+              <h2 className={`${isMobile ? 'text-xl' : 'text-3xl'} font-bold text-gray-800 mb-4`}>
+                {isMobile ? 'Our Journey' : 'Our Story'}
               </h2>
-              <p className="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
-                Established in 2015, Usman Clothes House has been serving the community with
-                premium quality unstitched fabrics for over 10 years. What started as a small
-                family business has grown into one of the most trusted names in the textile industry.
+              <p className={`${isMobile ? 'text-xs' : 'text-base'} text-gray-600 mb-3 leading-relaxed`}>
+                {isMobile
+                  ? "Since 2015, we've delivered top unstitched fabrics. From a small family shop to a known brand."
+                  : "Established in 2015, Usman Clothes House has been serving the community with premium quality unstitched fabrics for over 10 years. What started as a small family business has grown into one of the most trusted names in the textile industry."}
               </p>
-              <p className="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">
-                We specialize in a wide range of fabrics including Lawn, Cotton, Silk, Chiffon,
-                and Linen, sourced directly from the finest mills across Pakistan. Our commitment
-                to quality and customer satisfaction has made us the preferred choice for thousands
-                of satisfied customers.
+              <p className={`${isMobile ? 'text-xs' : 'text-base'} text-gray-600 mb-3 leading-relaxed`}>
+                {isMobile
+                  ? 'We deal in Lawn, Cotton, Silk, Chiffon, and Linen with fair pricing.'
+                  : 'We specialize in a wide range of fabrics including Lawn, Cotton, Silk, Chiffon, and Linen, sourced directly from the finest mills across Pakistan.'}
               </p>
-              <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-                Today, we continue to uphold our tradition of excellence while embracing modern
-                technology to serve you better through our online platform.
+              <p className={`${isMobile ? 'text-xs' : 'text-base'} text-gray-600 leading-relaxed`}>
+                {isMobile
+                  ? 'Now online—tradition meets tech.'
+                  : 'Today, we continue to uphold our tradition of excellence while embracing modern technology to serve you better through our online platform.'}
               </p>
             </div>
-            <div className="bg-white p-6 sm:p-8 rounded-lg shadow-lg">
-              <h3 className="text-lg sm:text-xl font-semibold mb-5 text-center">Why Choose Us?</h3>
-              <div className="space-y-3 sm:space-y-4">
+            <div className="bg-white p-4 sm:p-8 rounded-lg shadow-lg">
+              <h3 className={`${isMobile ? 'text-base' : 'text-xl'} font-semibold mb-5 text-center`}>
+                Why Choose Us?
+              </h3>
+              <div className={`${isMobile ? 'grid grid-cols-2 gap-3' : 'space-y-4'}`}>
                 {['Premium Quality', 'Competitive Prices', 'Expert Guidance', 'Fast Delivery'].map((title, i) => (
                   <div key={i} className="flex items-start">
-                    <div className="w-2 h-2 bg-amber-600 rounded-full mt-2 mr-3"></div>
+                    <div className="w-2 h-2 bg-amber-600 rounded-full mt-2 mr-2"></div>
                     <div>
-                      <h4 className="font-semibold text-sm sm:text-base">{title}</h4>
-                      <p className="text-gray-600 text-xs sm:text-sm">
+                      <h4 className={`font-semibold ${isMobile ? 'text-xs' : 'text-base'}`}>{title}</h4>
+                      <p className={`${isMobile ? 'text-[10px]' : 'text-sm'} text-gray-600`}>
                         {{
-                          'Premium Quality': 'Finest fabrics sourced directly from mills',
-                          'Competitive Prices': 'Best value for your money',
-                          'Expert Guidance': 'Professional advice and support',
-                          'Fast Delivery': 'Quick and reliable shipping',
+                          'Premium Quality': 'Finest fabrics from top mills',
+                          'Competitive Prices': 'Affordable premium range',
+                          'Expert Guidance': 'We help you choose best',
+                          'Fast Delivery': 'Quick and reliable service',
                         }[title]}
                       </p>
                     </div>

@@ -23,9 +23,7 @@ interface Product {
   stock: number;
 }
 
-
 const Products = () => {
-
   const mainCategoryOptions = ['All', 'Men', 'Women', 'Home Essentials'];
 
   const subCategoryOptions: { [key: string]: string[] } = {
@@ -36,8 +34,6 @@ const Products = () => {
 
   const [mainCategory, setMainCategory] = useState('All');
   const [subCategory, setSubCategory] = useState('All');
-
-
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<string[]>(['all']);
@@ -52,7 +48,6 @@ const Products = () => {
     fetchProducts();
     fetchCategories();
 
-    // Check if there's a category filter from URL
     const categoryFromUrl = searchParams.get('category');
     if (categoryFromUrl) {
       setSelectedCategory(categoryFromUrl);
@@ -63,12 +58,9 @@ const Products = () => {
     filterProducts();
   }, [products, searchTerm, selectedCategory, mainCategory, subCategory]);
 
-
   const fetchCategories = async () => {
     try {
       const categoryList = ['all'];
-
-      // Get categories from products
       const querySnapshot = await getDocs(collection(db, 'products'));
       const productCategories = new Set<string>();
       querySnapshot.forEach((doc) => {
@@ -78,7 +70,6 @@ const Products = () => {
         }
       });
 
-      // Get custom categories
       const categoriesSnapshot = await getDocs(collection(db, 'categories'));
       categoriesSnapshot.forEach((doc) => {
         const categoryData = doc.data();
@@ -105,7 +96,7 @@ const Products = () => {
           name: data.name,
           price: data.price,
           image: data.image,
-          mainCategory: data.mainCategory || '', // ✅ Add this line
+          mainCategory: data.mainCategory || '',
           category: data.category,
           description: data.description,
           stock: data.stock,
@@ -137,13 +128,8 @@ const Products = () => {
       filtered = filtered.filter(product => product.category === subCategory);
     }
 
-    if (
-      searchTerm.trim() === '' &&
-      mainCategory === 'All' &&
-      subCategory === 'All'
-    ) {
+    if (searchTerm.trim() === '' && mainCategory === 'All' && subCategory === 'All') {
       const ordered: Product[] = [];
-
       const pushOrdered = (group: string) => {
         const groupProducts = filtered.filter(p => p.mainCategory === group);
         ordered.push(...groupProducts);
@@ -182,57 +168,66 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Our Products</h1>
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-4 sm:mb-8 text-gray-800">
+          Our Products
+        </h1>
 
         {/* Search and Filter */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5" />
-            <Input
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 text-sm sm:text-base"
-            />
-          </div>
+        <div className="bg-white p-2 sm:p-4 rounded-md shadow-sm">
+          <div className="flex flex-col md:flex-row gap-2 sm:gap-4 mb-4 sm:mb-2">
+            {/* Search Input */}
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-3 w-3 sm:h-4 sm:w-4" />
+              <Input
+                placeholder="Search products..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-8 text-xs sm:text-sm md:text-base h-8 sm:h-10"
+              />
+            </div>
 
-          <Select
-            value={mainCategory}
-            onValueChange={(value) => {
-              setMainCategory(value);
-              setSubCategory('All');
-            }}
-          >
-            <SelectTrigger className="w-full md:w-48 text-sm sm:text-base" />
-            <SelectValue placeholder="Main Category" />
-            <SelectContent>
-              {mainCategoryOptions.map((main) => (
-                <SelectItem key={main} value={main} className="text-sm sm:text-base">
-                  {main}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {mainCategory !== 'All' && (
-            <Select value={subCategory} onValueChange={setSubCategory}>
-              <SelectTrigger className="w-full md:w-48 text-sm sm:text-base" />
-              <SelectValue placeholder="Subcategory" />
-              <SelectContent>
-                <SelectItem value="All" className="text-sm sm:text-base">
-                  All
-                </SelectItem>
-                {subCategoryOptions[mainCategory]?.map((sub) => (
-                  <SelectItem key={sub} value={sub} className="text-sm sm:text-base">
-                    {sub}
+            {/* Main Category */}
+            <Select
+              value={mainCategory}
+              onValueChange={(value) => {
+                setMainCategory(value);
+                setSubCategory('All');
+              }}
+            >
+              <SelectTrigger className="w-full md:w-48 text-xs sm:text-sm h-8 sm:h-10">
+                <SelectValue placeholder="Main Category" />
+              </SelectTrigger>
+              <SelectContent className="bg-white shadow-md z-50">
+                {mainCategoryOptions.map((main) => (
+                  <SelectItem key={main} value={main} className="text-xs sm:text-sm">
+                    {main}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-          )}
+
+            {/* Subcategory (Only if applicable) */}
+            {mainCategory !== 'All' && (
+              <Select value={subCategory} onValueChange={setSubCategory}>
+                <SelectTrigger className="w-full md:w-48 text-xs sm:text-sm h-8 sm:h-10">
+                  <SelectValue placeholder="Subcategory" />
+                </SelectTrigger>
+                <SelectContent className="bg-white shadow-md z-50">
+                  <SelectItem value="All" className="text-xs sm:text-sm">
+                    All
+                  </SelectItem>
+                  {subCategoryOptions[mainCategory]?.map((sub) => (
+                    <SelectItem key={sub} value={sub} className="text-xs sm:text-sm">
+                      {sub}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
         </div>
+
 
         {/* Products Grid */}
         {searchTerm.trim() === '' && mainCategory === 'All' && subCategory === 'All' ? (
@@ -241,50 +236,59 @@ const Products = () => {
               const groupProducts = filteredProducts.filter(p => p.mainCategory === group);
               if (groupProducts.length === 0) return null;
               return (
-                <div key={group} className="mb-12">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-700">{group}</h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div key={group} className="mb-8 sm:mb-12">
+                  <h2 className="text-xl sm:text-2xl font-bold my-2 sm:mb-4 text-gray-700">
+                    {group}
+                  </h2>
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
                     {groupProducts.map((product) => (
                       <Card key={product.id} className="hover:shadow-lg transition-shadow">
                         <CardContent className="p-0">
-                          <div className="relative">
+                          <div className="relative aspect-[3/4]">
                             <img
                               src={product.image}
                               alt={product.name}
-                              className="w-full h-48 object-cover"
+                              className="w-full h-full object-cover"
                             />
-                            <Badge className="absolute top-2 left-2 bg-amber-600">
+                            <Badge className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-amber-600 text-[8px] sm:text-xs">
                               {product.category}
                             </Badge>
                             {product.stock === 0 && (
-                              <Badge className="absolute top-2 right-2 bg-red-600">
+                              <Badge className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-red-600 text-[8px] sm:text-xs">
                                 Out of Stock
                               </Badge>
                             )}
                           </div>
-                          <div className="p-4">
-                            <h3 className="font-semibold text-gray-800 mb-2">{product.name}</h3>
-                            <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
-                            <div className="flex items-center justify-between mb-3">
-                              <span className="text-lg font-bold text-amber-600">
+                          <div className="p-2 sm:p-4">
+                            <h3 className="font-semibold text-gray-800 mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">
+                              {product.name}
+                            </h3>
+                            <p className="text-gray-600 text-[10px] sm:text-xs mb-2 sm:mb-3 line-clamp-2">
+                              {product.description}
+                            </p>
+                            <div className="flex items-center justify-between mb-2 sm:mb-3">
+                              <span className="text-xs sm:text-sm md:text-base font-bold text-amber-600">
                                 Rs. {product.price.toLocaleString()}
                               </span>
-                              <span className="text-sm text-gray-500">
+                              <span className="text-[10px] sm:text-xs text-gray-500">
                                 Stock: {product.stock}
                               </span>
                             </div>
-                            <div className="flex space-x-2">
+                            <div className="flex space-x-1 sm:space-x-2">
                               <Link to={`/product/${product.id}`} className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  View Details
+                                <Button
+                                  variant="outline"
+                                  className="w-full text-[10px] sm:text-xs h-6 sm:h-8 md:h-9 px-1 sm:px-2"
+                                >
+                                  View
                                 </Button>
                               </Link>
                               {currentUser && !isAdmin && product.stock > 0 && (
                                 <Button
                                   onClick={() => handleAddToCart(product)}
-                                  className="bg-amber-600 hover:bg-amber-700"
+                                  className="bg-amber-600 hover:bg-amber-700 h-6 sm:h-8 md:h-9 w-6 sm:w-8 md:w-9 p-0"
                                 >
-                                  <ShoppingCart className="h-4 w-4" />
+                                  <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
                                 </Button>
                               )}
                             </div>
@@ -298,57 +302,55 @@ const Products = () => {
             })}
           </>
         ) : (
-          // Show filtered normally when filters are applied
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
             {filteredProducts.map((product) => (
-              <Card
-                key={product.id}
-                className="hover:shadow-lg transition-shadow"
-              >
-                <CardContent className="p-0 sm:p-4">
-                  <div className="relative">
+              <Card key={product.id} className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-0">
+                  <div className="relative aspect-[3/4]">
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-full object-cover"
                     />
-                    <Badge className="absolute top-2 left-2 bg-amber-600 text-xs sm:text-sm">
+                    <Badge className="absolute top-1 left-1 sm:top-2 sm:left-2 bg-amber-600 text-[8px] sm:text-xs">
                       {product.category}
                     </Badge>
                     {product.stock === 0 && (
-                      <Badge className="absolute top-2 right-2 bg-red-600 text-xs sm:text-sm">
+                      <Badge className="absolute top-1 right-1 sm:top-2 sm:right-2 bg-red-600 text-[8px] sm:text-xs">
                         Out of Stock
                       </Badge>
                     )}
                   </div>
-                  <div className="p-3 sm:p-4">
-                    <h3 className="font-semibold text-gray-800 mb-2 text-base sm:text-lg">
+                  <div className="p-2 sm:p-4">
+                    <h3 className="font-semibold text-gray-800 mb-1 sm:mb-2 text-xs sm:text-sm md:text-base">
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">
+                    <p className="text-gray-600 text-[10px] sm:text-xs mb-2 sm:mb-3 line-clamp-2">
                       {product.description}
                     </p>
-                    <div className="flex items-center justify-between mb-3 text-sm sm:text-base">
-                      <span className="font-bold text-amber-600">
+                    <div className="flex items-center justify-between mb-2 sm:mb-3">
+                      <span className="text-xs sm:text-sm md:text-base font-bold text-amber-600">
                         Rs. {product.price.toLocaleString()}
                       </span>
-                      <span className="text-gray-500">
+                      <span className="text-[10px] sm:text-xs text-gray-500">
                         Stock: {product.stock}
                       </span>
                     </div>
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-1 sm:space-x-2">
                       <Link to={`/product/${product.id}`} className="flex-1">
-                        <Button variant="outline" className="w-full text-sm sm:text-base">
-                          View Details
+                        <Button
+                          variant="outline"
+                          className="w-full text-[10px] sm:text-xs h-6 sm:h-8 md:h-9 px-1 sm:px-2"
+                        >
+                          View
                         </Button>
                       </Link>
                       {currentUser && !isAdmin && product.stock > 0 && (
                         <Button
                           onClick={() => handleAddToCart(product)}
-                          className="bg-amber-600 hover:bg-amber-700"
-                          size="sm"
+                          className="bg-amber-600 hover:bg-amber-700 h-6 sm:h-8 md:h-9 w-6 sm:w-8 md:w-9 p-0"
                         >
-                          <ShoppingCart className="h-4 w-4" />
+                          <ShoppingCart className="h-3 w-3 sm:h-4 sm:w-4" />
                         </Button>
                       )}
                     </div>
@@ -360,8 +362,10 @@ const Products = () => {
         )}
 
         {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No products found matching your criteria.</p>
+          <div className="text-center py-8 sm:py-12">
+            <p className="text-gray-500 text-sm sm:text-base md:text-lg">
+              No products found matching your criteria.
+            </p>
           </div>
         )}
       </div>
@@ -372,3 +376,8 @@ const Products = () => {
 };
 
 export default Products;
+
+
+
+
+
