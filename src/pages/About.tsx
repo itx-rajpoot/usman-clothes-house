@@ -143,7 +143,7 @@ const About = () => {
             {/* Map Placeholder */}
             <div className="bg-gray-200 rounded-lg h-64 sm:h-80 lg:h-96 flex items-center justify-center relative">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d268.0244741648558!2d73.42481015663381!3d31.554742474746355!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e1!3m2!1sen!2s!4v1751211624100!5m2!1sen!2s"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d295.1437218594238!2d73.42490132371839!3d31.554645306748434!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x392275000f29fbb3%3A0x2b9725d560156a04!2sUsman%20Clothes%20House!5e1!3m2!1sen!2s!4v1751556861285!5m2!1sen!2s"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
